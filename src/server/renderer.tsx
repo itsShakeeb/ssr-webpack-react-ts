@@ -1,33 +1,33 @@
 import fs from 'fs';
 
 interface ManifestAssets {
-    'main.js': string;
-    'main.css'?: string;
+  'main.js': string;
+  'main.css'?: string;
 }
 
 export function createRenderer(manifestPath: string) {
-    // Read and parse the asset manifest file
-    let assets: ManifestAssets = { 'main.js': '/static/js/main.js' };
+  // Read and parse the asset manifest file
+  let assets: ManifestAssets = { 'main.js': '/static/js/main.js' };
 
-    try {
-        const manifestContent = fs.readFileSync(manifestPath, 'utf-8');
-        const manifest = JSON.parse(manifestContent);
-        assets = {
-            'main.js': manifest['main.js'] || '/static/js/main.js',
-            'main.css': manifest['main.css'],
-        };
-    } catch (error) {
-        console.warn('Could not read asset manifest:', error);
-        console.warn('Using default asset paths');
-    }
+  try {
+    const manifestContent = fs.readFileSync(manifestPath, 'utf-8');
+    const manifest = JSON.parse(manifestContent);
+    assets = {
+      'main.js': manifest['main.js'] || '/static/js/main.js',
+      'main.css': manifest['main.css'],
+    };
+  } catch (error) {
+    console.warn('Could not read asset manifest:', error);
+    console.warn('Using default asset paths');
+  }
 
-    // Return a function that renders the full HTML
-    return (appHtml: string, initialState: any) => {
-        const cssLinks = assets['main.css']
-            ? `<link rel="stylesheet" href="${assets['main.css']}">`
-            : '';
+  // Return a function that renders the full HTML
+  return (appHtml: string, initialState: any) => {
+    const cssLinks = assets['main.css']
+      ? `<link rel="stylesheet" href="${assets['main.css']}">`
+      : '';
 
-        return `
+    return `
       <!DOCTYPE html>
       <html lang="en">
         <head>
@@ -45,5 +45,5 @@ export function createRenderer(manifestPath: string) {
         </body>
       </html>
     `;
-    };
+  };
 }

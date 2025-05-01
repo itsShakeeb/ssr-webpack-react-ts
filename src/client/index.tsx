@@ -8,15 +8,15 @@ const initialState = window.__INITIAL_STATE__ || {};
 
 // Hydrate the app with the server-rendered content
 hydrateRoot(
-    document.getElementById('root') as HTMLElement,
-    <BrowserRouter>
-        <App initialState={initialState} />
-    </BrowserRouter>
+  document.getElementById('root') as HTMLElement,
+  <BrowserRouter>
+    <App initialState={initialState} />
+  </BrowserRouter>
 );
 
 // TypeScript declaration for window object
 declare global {
-    interface Window {
-        __INITIAL_STATE__: any;
-    }
+  interface Window {
+    __INITIAL_STATE__: any;
+  }
 }

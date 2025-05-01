@@ -20,9 +20,9 @@ app.use('/static', express.static(path.resolve(__dirname, '../client')));
 
 // API endpoints
 app.get('/version', (req, res) => {
-    res.status(200).send({
-        version: '0.0.1',
-    });
+  res.status(200).send({
+    version: '0.0.1',
+  });
 });
 
 // Create HTML renderer
@@ -30,33 +30,33 @@ const renderer = createRenderer(path.resolve('dist/client/asset-manifest.json'))
 
 // Handle all page requests
 app.use(/.*/, async (req, res) => {
-    try {
-        // Initial data for SSR
-        const initialState = {
-            data: {
-                message: `Server-rendered at ${new Date().toISOString()}`,
-            },
-        };
+  try {
+    // Initial data for SSR
+    const initialState = {
+      data: {
+        message: `Server-rendered at ${new Date().toISOString()}`,
+      },
+    };
 
-        // Render the React app to string
-        const appHtml = renderToString(
-            <StaticRouter location={req.url}>
-                <App initialState={initialState} />
-            </StaticRouter>
-        );
+    // Render the React app to string
+    const appHtml = renderToString(
+      <StaticRouter location={req.url}>
+        <App initialState={initialState} />
+      </StaticRouter>
+    );
 
-        // Generate the full HTML response
-        const html = renderer(appHtml, initialState);
+    // Generate the full HTML response
+    const html = renderer(appHtml, initialState);
 
-        res.setHeader('Content-Type', 'text/html');
-        res.send(html);
-    } catch (error) {
-        console.error('Rendering error:', error);
-        res.status(500).send('Server error');
-    }
+    res.setHeader('Content-Type', 'text/html');
+    res.send(html);
+  } catch (error) {
+    console.error('Rendering error:', error);
+    res.status(500).send('Server error');
+  }
 });
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

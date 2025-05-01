@@ -1,27 +1,46 @@
-export default {
-    "parser": "@typescript-eslint/parser",
-    "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:react-hooks/recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:prettier/recommended"
-    ],
-    "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
-    "env": {
-      "browser": true,
-      "node": true,
-      "es6": true
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import prettierPlugin from 'eslint-plugin-prettier';
+
+export default [
+  js.configs.recommended, // Base ESLint recommended rules
+
+  {
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+        project: './tsconfig.json', // Adjust if needed
+      },
+      globals: {
+        JSX: 'readonly',
+      },
     },
-    "rules": {
-      "prettier/prettier": ["error"],
-      "react/react-in-jsx-scope": "off", 
-      "@typescript-eslint/explicit-module-boundary-types": "off"
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+      '@typescript-eslint': tseslint.plugin,
+      prettier: prettierPlugin,
     },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    }
-}
-  
+    rules: {
+      ...reactPlugin.configs.recommended.rules,
+      ...reactHooksPlugin.configs.recommended.rules,
+      ...tseslint.configs.recommended.rules,
+      'prettier/prettier': 'error',
+      'react/react-in-jsx-scope': 'off', // Not needed in React 17+
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+];
